@@ -1,611 +1,209 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CineAmor — Filmes de Romance</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CineAmor — Filmes Favoritos</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --cream: #fdf6ee;
-      --rose:  #c2405a;
-      --wine:  #7a1f34;
-      --gold:  #d4a44c;
-      --dark:  #1a0d12;
-      --card-w: 200px;
+      --preto: #0f0a0d; --escuro: #1a0d12; --vinho: #7a1f34;
+      --vermelho: #c2405a; --dourado: #d4a44c; --creme: #fdf6ee;
     }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--dark);
-      color: var(--cream);
-      font-family: 'Lato', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── HERO ── */
-    header {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(194,64,90,.45) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(122,31,52,.35) 0%, transparent 65%),
-        linear-gradient(160deg, #1a0d12 0%, #2e0f1f 50%, #120a0e 100%);
-    }
-
-    .hero-bg::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c2405a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: .6;
-    }
-
-    .hearts {
-      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-    }
-    .hearts span {
-      position: absolute;
-      font-size: clamp(14px, 2vw, 28px);
-      opacity: 0;
-      animation: floatHeart linear infinite;
-    }
-    @keyframes floatHeart {
-      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-      10%  { opacity: .25; }
-      90%  { opacity: .18; }
-      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-    }
-
-    .hero-content { position: relative; z-index: 2; padding: 0 1rem; }
-
-    .logo-icon {
-      font-size: 3.5rem;
-      display: block;
-      margin-bottom: .5rem;
-      filter: drop-shadow(0 0 18px rgba(194,64,90,.8));
-      animation: pulse 3s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.08); }
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 9vw, 7rem);
-      font-weight: 700;
-      letter-spacing: -1px;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--cream) 30%, var(--gold) 70%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tagline {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: rgba(253,246,238,.65);
-      margin-top: .75rem;
-      letter-spacing: 1px;
-    }
-
-    .scroll-cta {
-      margin-top: 2.5rem;
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .75rem 2rem;
-      border: 1px solid rgba(212,164,76,.5);
-      border-radius: 50px;
-      color: var(--gold);
-      font-size: .85rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .3s;
-      background: rgba(212,164,76,.08);
-      text-decoration: none;
-    }
-    .scroll-cta:hover { background: rgba(212,164,76,.2); border-color: var(--gold); }
-
-    /* ── SECTION ── */
-    .section {
-      padding: 5rem 2rem 4rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--cream);
-      margin-bottom: .5rem;
-    }
-    .section-title span { color: var(--rose); }
-
-    .section-subtitle {
-      font-size: .9rem;
-      color: rgba(253,246,238,.45);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-    }
-    .section-subtitle::after {
-      content: '';
-      flex: 1;
-      max-width: 120px;
-      height: 1px;
-      background: var(--rose);
-      opacity: .5;
-    }
-
-    /* ── GRID ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
-      gap: 1.5rem;
-    }
-
-    /* ── CARD ── */
-    .card {
-      background: #26121b;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(194,64,90,.15);
-      transition: transform .35s cubic-bezier(.25,.8,.25,1), box-shadow .35s;
-      cursor: pointer;
-      position: relative;
-    }
-    .card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(194,64,90,.35);
-      border-color: rgba(194,64,90,.45);
-      z-index: 5;
-    }
-
-    .poster-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 2/3;
-      overflow: hidden;
-    }
-    .poster-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform .5s ease;
-    }
-    .card:hover .poster-wrap img { transform: scale(1.07); }
-
-    .overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(26,13,18,1) 0%, rgba(26,13,18,.5) 35%, transparent 65%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1rem .85rem .85rem;
-      opacity: 0;
-      transition: opacity .3s;
-    }
-    .card:hover .overlay { opacity: 1; }
-
-    .overlay-desc {
-      font-size: .78rem;
-      color: rgba(253,246,238,.85);
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .badge-rating {
-      position: absolute;
-      top: .65rem; right: .65rem;
-      background: rgba(212,164,76,.92);
-      color: #1a0d12;
-      font-weight: 700;
-      font-size: .72rem;
-      padding: .2rem .5rem;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: .25rem;
-    }
-
-    .card-body { padding: .85rem 1rem 1rem; }
-
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--cream);
-      line-height: 1.3;
-      margin-bottom: .3rem;
-    }
-
-    .card-meta {
-      display: flex;
-      gap: .75rem;
-      font-size: .75rem;
-      color: rgba(253,246,238,.45);
-    }
-    .card-year { color: var(--gold); font-weight: 700; }
-
-    .tag {
-      display: inline-block;
-      padding: .15rem .5rem;
-      border-radius: 4px;
-      background: rgba(194,64,90,.2);
-      color: var(--rose);
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-    }
-
-    /* ── DESTAQUE ── */
-    .featured {
-      background: linear-gradient(135deg, #26121b 0%, #1f0e17 100%);
-      border: 1px solid rgba(212,164,76,.25);
-      border-radius: 20px;
-      padding: 2.5rem;
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 2.5rem;
-      align-items: center;
-      margin-bottom: 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .featured::before {
-      content: '"';
-      position: absolute;
-      top: -1rem; right: 2rem;
-      font-family: 'Playfair Display', serif;
-      font-size: 12rem;
-      color: rgba(194,64,90,.06);
-      line-height: 1;
-    }
-    .featured img {
-      width: 100%; aspect-ratio: 2/3; object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.6);
-    }
-    .featured-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: linear-gradient(90deg, var(--rose), var(--wine));
-      color: #fff;
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: .35rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 1rem;
-    }
-    .featured h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 1.1;
-      margin-bottom: .5rem;
-    }
-    .featured-year { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; }
-    .featured-desc { color: rgba(253,246,238,.7); line-height: 1.7; font-size: .95rem; max-width: 560px; }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      padding: 3rem 1rem;
-      border-top: 1px solid rgba(194,64,90,.15);
-      color: rgba(253,246,238,.3);
-      font-size: .8rem;
-      letter-spacing: 1px;
-    }
-    footer span { color: var(--rose); }
-
-    /* ── MODAL ── */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(10,4,8,.92);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s;
-    }
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-    .modal {
-      background: #26121b;
-      border: 1px solid rgba(194,64,90,.3);
-      border-radius: 18px;
-      max-width: 680px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 0;
-      overflow: hidden;
-      transform: scale(.92);
-      transition: transform .3s;
-      max-height: 90vh;
-    }
-    .modal-overlay.open .modal { transform: scale(1); }
-
-    .modal img {
-      width: 100%; aspect-ratio: 2/3; object-fit: cover;
-    }
-    .modal-body {
-      padding: 2rem 1.8rem;
-      overflow-y: auto;
-    }
-    .modal-body h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      margin-bottom: .3rem;
-    }
-    .modal-body .modal-year { color: var(--gold); font-size: .9rem; margin-bottom: 1rem; }
-    .modal-body p { color: rgba(253,246,238,.75); line-height: 1.7; font-size: .9rem; }
-    .modal-close {
-      position: absolute;
-      top: .75rem; right: .75rem;
-      background: rgba(194,64,90,.8);
-      border: none;
-      color: #fff;
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10;
-    }
-    .modal-close:hover { background: var(--rose); }
-
-    /* ── RESPONSIVE ── */
-    @media(max-width: 640px) {
-      .featured { grid-template-columns: 1fr; }
-      .featured img { max-width: 180px; margin: 0 auto; }
-      .modal { grid-template-columns: 1fr; }
-      .modal img { max-height: 200px; }
+    body { background: var(--preto); color: var(--creme); font-family: 'Lato', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    header { background: linear-gradient(135deg, var(--escuro), #2e0f1f); border-bottom: 2px solid var(--vermelho); padding: 2rem 1rem 1.5rem; text-align: center; }
+    header .logo { font-size: 2.5rem; display: block; margin-bottom: .4rem; }
+    header h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--dourado); letter-spacing: 2px; }
+    header .tagline { color: rgba(253,246,238,.55); font-style: italic; margin: .3rem 0 1.2rem; }
+    nav { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    nav button { background: transparent; color: var(--creme); border: 1px solid rgba(212,164,76,.4); border-radius: 50px; padding: .5rem 1.6rem; font-size: .9rem; letter-spacing: 1px; cursor: pointer; transition: all .3s; font-family: 'Lato', sans-serif; }
+    nav button:hover, nav button.ativo { background: var(--vermelho); border-color: var(--vermelho); color: #fff; }
+    
+    .pagina { display: none; max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .pagina.ativa { display: block; }
+    .pagina h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: .4rem; }
+    .subtitulo { color: rgba(253,246,238,.5); margin-bottom: 2.5rem; font-size: .95rem; }
+    
+    .grid-filmes { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; justify-items: center; }
+    .card { background: #26121b; border: 1px solid rgba(194,64,90,.2); border-radius: 12px; width: 100%; max-width: 200px; overflow: hidden; cursor: pointer; transition: transform .3s, box-shadow .3s; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(194,64,90,.4); border-color: var(--vermelho); }
+    .poster { position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; background: #1a0d12; }
+    .poster img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .card:hover .poster img { transform: scale(1.06); }
+    .nota { position: absolute; top: .5rem; right: .5rem; background: rgba(212,164,76,.92); color: #1a0d12; font-weight: 700; font-size: .72rem; padding: .2rem .5rem; border-radius: 20px; }
+    .card-info { padding: .8rem 1rem; }
+    .card-info h3 { font-family: 'Playfair Display', serif; font-size: .95rem; color: var(--creme); margin-bottom: .25rem; line-height: 1.3; }
+    .card-info p { color: var(--dourado); font-size: .75rem; }
+    
+    .modal-fundo { display: none; position: fixed; inset: 0; background: rgba(10,4,8,.9); z-index: 100; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+    .modal-fundo.aberto { display: flex; }
+    .modal-caixa { background: #26121b; border: 1px solid var(--vermelho); border-radius: 16px; padding: 2.5rem; max-width: 460px; width: 100%; position: relative; animation: aparecer .3s ease; }
+    @keyframes aparecer { from { transform: scale(.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-caixa h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: .4rem; color: var(--dourado); }
+    .modal-caixa .m-ano { color: var(--vermelho); font-size: .9rem; margin-bottom: 1rem; font-weight: bold; }
+    .modal-caixa .m-desc { color: rgba(253,246,238,.9); line-height: 1.7; font-size: 1rem; }
+    .btn-fechar { position: absolute; top: .8rem; right: .8rem; background: var(--vermelho); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+    .btn-fechar:hover { background: var(--vinho); }
+    
+    .secao-contato { max-width: 560px; margin: 0 auto; }
+    form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .campo { display: flex; flex-direction: column; gap: .4rem; }
+    .campo label { font-size: .9rem; color: var(--dourado); font-weight: 700; letter-spacing: .5px; }
+    .campo input, .campo textarea { background: #26121b; border: 1px solid rgba(194,64,90,.3); border-radius: 8px; color: var(--creme); padding: .8rem 1rem; font-size: .95rem; font-family: 'Lato', sans-serif; transition: border-color .3s; }
+    .campo input:focus, .campo textarea:focus { outline: none; border-color: var(--vermelho); background: #2e0f1f; }
+    .btn-enviar { background: linear-gradient(135deg, var(--vermelho), var(--vinho)); color: #fff; border: none; padding: .9rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all .3s; margin-top: .5rem; }
+    .btn-enviar:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(194,64,90,0.5); filter: brightness(1.1); }
+    
+    .msg-sucesso { display: none; text-align: center; padding: 3rem 2rem; background: #26121b; border: 1px solid var(--vermelho); border-radius: 16px; }
+    footer { text-align: center; padding: 3rem 1rem; border-top: 1px solid rgba(194,64,90,.2); color: rgba(253,246,238,.3); font-size: .85rem; margin-top: 2rem; }
+    footer span { color: var(--vermelho); }
+    
+    @media (max-width: 600px) { 
+      header h1 { font-size: 2.2rem; } 
+      .grid-filmes { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .card { max-width: 100%; }
     }
   </style>
 </head>
 <body>
 
-<!-- Floating hearts -->
-<div class="hearts" id="hearts"></div>
-
-<!-- ── HERO ── -->
-<header>
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <span class="logo-icon">♥</span>
+  <header>
+    <span class="logo">🎬</span>
     <h1>CineAmor</h1>
-    <p class="tagline">Os melhores filmes de romance para apaixonados</p>
-    <a href="#filmes" class="scroll-cta">▼ &nbsp; Ver filmes</a>
-  </div>
-</header>
+    <p class="tagline">Meus filmes favoritos de romance</p>
+    <nav>
+      <button class="ativo" id="btn-filmes" onclick="mostrarPagina('filmes', this)">🎥 Filmes</button>
+      <button id="btn-contato" onclick="mostrarPagina('contato', this)">✉️ Contato</button>
+    </nav>
+  </header>
 
-<!-- ── DESTAQUE ── -->
-<main>
-<div class="section" id="filmes">
-  <p class="section-subtitle">✦ &nbsp; Destaque do mês</p>
-  <div class="featured">
-    <img src="https://image.tmdb.org/t/p/w500/rzdPqYx7Um4FUZeD8wpXqjAUcEr.jpg" alt="A Culpa é das Estrelas" loading="lazy"/>
-    <div>
-      <div class="featured-badge">♥ &nbsp; Filme em Destaque</div>
-      <h2>A Culpa é das Estrelas</h2>
-      <p class="featured-year">2014 &nbsp;·&nbsp; Romance / Drama</p>
-      <p class="featured-desc">
-        Hazel e Augustus se conhecem num grupo de apoio para jovens com câncer. Juntos, eles embarcam numa jornada inesperada pela vida, pelo amor e pelo que significa deixar uma marca no mundo — mesmo que o tempo seja curto.
-      </p>
+  <main>
+    <div class="pagina ativa" id="pg-filmes">
+      <h2>🎥 Minha Vitrine de Filmes</h2>
+      <p class="subtitulo">Clique em um filme para saber mais!</p>
+      <div class="grid-filmes">
+
+        <div class="card" onclick="abrirModal('A Culpa é das Estrelas','2014','Hazel e Augustus se conhecem num grupo de apoio para jovens com câncer e vivem um amor inesquecível.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/rzdPqYx7Um4FUZeD8wpXqjAUcEr.jpg" alt="Poster A Culpa é das Estrelas"/><span class="nota">★ 7.8</span></div>
+          <div class="card-info"><h3>A Culpa é das Estrelas</h3><p>2014 · Romance</p></div>
+        </div>
+
+        <div class="card" onclick="abrirModal('Diário de uma Paixão','2004','Noah e Allie se apaixonam num verão de 1940, mas são separados pelas diferenças de classe social.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/qom1SZSENdmHFNZBXbtLAGsGFEw.jpg" alt="Poster Diário de uma Paixão"/><span class="nota">★ 7.8</span></div>
+          <div class="card-info"><h3>Diário de uma Paixão</h3><p>2004 · Romance</p></div>
+        </div>
+
+        <div class="card" onclick="abrirModal('Titanic','1997','Jack e Rose se apaixonam a bordo do navio mais famoso do mundo em 1912, num amor impossível e eterno.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg" alt="Poster Titanic"/><span class="nota">★ 7.9</span></div>
+          <div class="card-info"><h3>Titanic</h3><p>1997 · Romance / Drama</p></div>
+        </div>
+
+        <div class="card" onclick="abrirModal('La La Land','2016','Em Los Angeles, uma atriz e um pianista se apaixonam enquanto perseguem seus sonhos.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg" alt="Poster La La Land"/><span class="nota">★ 8.0</span></div>
+          <div class="card-info"><h3>La La Land</h3><p>2016 · Romance / Musical</p></div>
+        </div>
+
+        <div class="card" onclick="abrirModal('Orgulho e Preconceito','2005','Elizabeth Bennet e Mr. Darcy vivem uma tensão irresistível numa Inglaterra do século XIX.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/5GpM4wFDOSXbBUhTOPFSj7SpLCZ.jpg" alt="Poster Orgulho e Preconceito"/><span class="nota">★ 7.8</span></div>
+          <div class="card-info"><h3>Orgulho e Preconceito</h3><p>2005 · Romance / Clássico</p></div>
+        </div>
+
+        <div class="card" onclick="abrirModal('Como Eu Era Antes de Você','2016','Louisa aceita cuidar de Will, um jovem paraplégico. Uma conexão que muda a vida dos dois para sempre.')">
+          <div class="poster"><img src="https://image.tmdb.org/t/p/w500/iRiLGwKKRGMJoNBt2f7cKTe7bAX.jpg" alt="Poster Como Eu Era Antes de Você"/><span class="nota">★ 7.4</span></div>
+          <div class="card-info"><h3>Como Eu Era Antes de Você</h3><p>2016 · Romance / Drama</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pagina" id="pg-contato">
+      <div class="secao-contato">
+        <h2>✉️ Entre em Contato</h2>
+        <p class="subtitulo">Quer indicar um filme ou mandar uma mensagem?</p>
+        <form id="formulario" onsubmit="enviarFormulario(event)">
+          <div class="campo">
+            <label for="nome">👤 Nome</label>
+            <input type="text" id="nome" placeholder="Digite seu nome..." required/>
+          </div>
+          <div class="campo">
+            <label for="email">📧 E-mail</label>
+            <input type="email" id="email" placeholder="seuemail@exemplo.com" required/>
+          </div>
+          <div class="campo">
+            <label for="mensagem">💬 Mensagem</label>
+            <textarea id="mensagem" rows="5" placeholder="Escreva sua mensagem aqui..." required></textarea>
+          </div>
+          <button type="submit" class="btn-enviar">Enviar Mensagem ❤️</button>
+        </form>
+        <div class="msg-sucesso" id="sucesso">
+          <span class="emoji">🎉</span>
+          <h3>Mensagem enviada!</h3>
+          <p id="texto-sucesso"></p>
+          <button class="btn-voltar" onclick="voltarFilmes()" style="margin-top: 1.5rem; background: var(--vermelho); color: #fff; border: none; padding: .7rem 1.8rem; border-radius: 50px; cursor: pointer; font-family: 'Lato', sans-serif; font-weight: 700;">← Voltar aos filmes</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-fundo" id="modal" onclick="fecharModal()">
+    <div class="modal-caixa" onclick="event.stopPropagation()">
+      <button class="btn-fechar" onclick="fecharModal()" aria-label="Fechar modal">✕</button>
+      <h3 id="m-titulo"></h3>
+      <p class="m-ano" id="m-ano"></p>
+      <p class="m-desc" id="m-desc"></p>
     </div>
   </div>
 
-  <!-- ── GRID DE FILMES ── -->
-  <p class="section-subtitle">✦ &nbsp; Coleção de romance</p>
-  <div class="grid" id="movieGrid"></div>
-</div>
-</main>
+  <footer><p>Feito com <span>❤️</span> para o trabalho escolar · CineAmor</p></footer>
 
-<footer>
-  <p>Feito com <span>♥</span> para o trabalho escolar &nbsp;·&nbsp; CineAmor &copy; 2024</p>
-  <p style="margin-top:.4rem">Imagens: The Movie Database (TMDB)</p>
-</footer>
-
-<!-- ── MODAL ── -->
-<div class="modal-overlay" id="modalOverlay">
-  <button class="modal-close" id="modalClose">✕</button>
-  <div class="modal" id="modalBox">
-    <img id="modalImg" src="" alt=""/>
-    <div class="modal-body">
-      <h3 id="modalTitle"></h3>
-      <p class="modal-year" id="modalYear"></p>
-      <p id="modalDesc"></p>
-    </div>
-  </div>
-</div>
-
-<script>
-  // ── Dados dos filmes ──
-  const movies = [
-    {
-      title: "Diário de uma Paixão",
-      year: "2004",
-      genre: "Romance",
-      rating: "7.8",
-      poster: "https://image.tmdb.org/t/p/w500/qom1SZSENdmHFNZBXbtLAGsGFEw.jpg",
-      desc: "Noah e Allie se apaixonam num verão de 1940, mas são separados pelas diferenças de classe. Anos depois, um diário reconstrói sua história de amor inesquecível."
-    },
-    {
-      title: "Como Eu Era Antes de Você",
-      year: "2016",
-      genre: "Romance",
-      rating: "7.4",
-      poster: "https://image.tmdb.org/t/p/w500/iRiLGwKKRGMJoNBt2f7cKTe7bAX.jpg",
-      desc: "Louisa Clark aceita trabalhar como cuidadora de Will Traynor, um jovem paraplégico. O que começa como uma tarefa difícil se transforma numa conexão que muda a vida de ambos."
-    },
-    {
-      title: "Quero Matar Meu Chefe",
-      year: "2014",
-      genre: "Romance / Comédia",
-      rating: "6.5",
-      poster: "https://image.tmdb.org/t/p/w500/bHkWGn3bKMHYvloU7uXFpCDYGQG.jpg",
-      desc: "Anna e Josh trabalham juntos e precisam fingir um relacionamento, mas os sentimentos reais logo aparecem numa comédia romântica cheia de reviravolta."
-    },
-    {
-      title: "Orgulho e Preconceito",
-      year: "2005",
-      genre: "Romance / Clássico",
-      rating: "7.8",
-      poster: "https://image.tmdb.org/t/p/w500/5GpM4wFDOSXbBUhTOPFSj7SpLCZ.jpg",
-      desc: "Elizabeth Bennet e Mr. Darcy vivem uma tensão irresistível numa Inglaterra do século XIX, onde orgulho e preconceito ameaçam um amor verdadeiro."
-    },
-    {
-      title: "La La Land",
-      year: "2016",
-      genre: "Romance / Musical",
-      rating: "8.0",
-      poster: "https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",
-      desc: "Em Los Angeles, uma atriz aspirante e um pianista de jazz se apaixonam enquanto perseguem seus sonhos — mas o amor e a ambição raramente seguem o mesmo ritmo."
-    },
-    {
-      title: "Titanic",
-      year: "1997",
-      genre: "Romance / Drama",
-      rating: "7.9",
-      poster: "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
-      desc: "Jack e Rose se apaixonam a bordo do navio mais famoso do mundo em 1912. Um amor impossível que atravessa classes sociais e um destino trágico inesquecível."
-    },
-    {
-      title: "Simplesmente Amor",
-      year: "2003",
-      genre: "Romance / Comédia",
-      rating: "7.0",
-      poster: "https://image.tmdb.org/t/p/w500/tSPHb9JfnYXB4FHDcTNjXQDToq0.jpg",
-      desc: "Em várias histórias entrelaçadas em Londres, o amor aparece de formas inesperadas — engraçadas, dolorosas e sempre surpreendentes — próximo ao Natal."
-    },
-    {
-      title: "Enamorado de Minha Professora",
-      year: "2010",
-      genre: "Romance",
-      rating: "7.5",
-      poster: "https://image.tmdb.org/t/p/w500/bvVSLQzaKJeUEi5mLTBf1LqSIrF.jpg",
-      desc: "Uma história encantadora sobre reencontros, segundas chances e a descoberta de que alguns amores simplesmente não se apagam com o tempo."
-    },
-    {
-      title: "Romeo + Julieta",
-      year: "1996",
-      genre: "Romance / Clássico",
-      rating: "6.7",
-      poster: "https://image.tmdb.org/t/p/w500/pg9FtmF1PQCxj7vNIqLLqTh3bZX.jpg",
-      desc: "A releitura moderna da obra de Shakespeare coloca os jovens amantes em Verona Beach, misturando poesia clássica com estética ousada e visual impactante."
-    },
-    {
-      title: "Querido John",
-      year: "2010",
-      genre: "Romance / Drama",
-      rating: "6.9",
-      poster: "https://image.tmdb.org/t/p/w500/xWtCULBvHMlbiIraHqQomfH8kVL.jpg",
-      desc: "John, soldado do exército, e Savannah, uma universitária, se apaixonam em duas semanas de férias. Cartas mantêm o amor vivo enquanto a distância e a guerra os separam."
-    },
-    {
-      title: "Casamento Grego",
-      year: "2002",
-      genre: "Romance / Comédia",
-      rating: "6.2",
-      poster: "https://image.tmdb.org/t/p/w500/4k7HQ52L6zT5cRHKqGJCCZ7sJDv.jpg",
-      desc: "Toula, de família grega superprotetora, se apaixona por um americano não-grego. Uma comédia deliciosa sobre amor, família e identidade cultural."
-    },
-    {
-      title: "Cinderela",
-      year: "2015",
-      genre: "Romance / Fantasia",
-      rating: "7.0",
-      poster: "https://image.tmdb.org/t/p/w500/2i0JH5WrmB5cNNuHJRpPMbsQwPe.jpg",
-      desc: "A versão live-action da Disney reconta o conto clássico com visual deslumbrante: uma jovem gentil encontra o amor num baile, desafiando seu destino."
+  <script>
+    function mostrarPagina(pagina, botao) {
+      document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativo'));
+      
+      const pgAlvo = document.getElementById('pg-' + pagina);
+      if(pgAlvo) pgAlvo.classList.add('ativa');
+      if(botao) botao.classList.add('ativo');
+      window.scrollTo(0, 0);
     }
-  ];
 
-  // ── Gerar cards ──
-  const grid = document.getElementById('movieGrid');
-  movies.forEach((m, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="poster-wrap">
-        <img src="${m.poster}" alt="${m.title}" loading="lazy" />
-        <div class="badge-rating">★ ${m.rating}</div>
-        <div class="overlay">
-          <p class="overlay-desc">${m.desc}</p>
-        </div>
-      </div>
-      <div class="card-body">
-        <p class="card-title">${m.title}</p>
-        <div class="card-meta">
-          <span class="card-year">${m.year}</span>
-          <span class="tag">${m.genre}</span>
-        </div>
-      </div>
-    `;
-    card.addEventListener('click', () => openModal(m));
-    grid.appendChild(card);
-  });
+    function abrirModal(titulo, ano, descricao) {
+      document.getElementById('m-titulo').textContent = titulo;
+      document.getElementById('m-ano').textContent = '📅 ' + ano;
+      document.getElementById('m-desc').textContent = descricao;
+      document.getElementById('modal').classList.add('aberto');
+      document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+    }
 
-  // ── Modal ──
-  const overlay = document.getElementById('modalOverlay');
-  const modalClose = document.getElementById('modalClose');
+    function fecharModal() {
+      document.getElementById('modal').classList.remove('aberto');
+      document.body.style.overflow = 'auto'; // Destrava o scroll
+    }
 
-  function openModal(m) {
-    document.getElementById('modalImg').src = m.poster;
-    document.getElementById('modalImg').alt = m.title;
-    document.getElementById('modalTitle').textContent = m.title;
-    document.getElementById('modalYear').textContent = m.year + ' · ' + m.genre + ' · ★ ' + m.rating;
-    document.getElementById('modalDesc').textContent = m.desc;
-    overlay.classList.add('open');
-  }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
 
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
-  modalClose.addEventListener('click', () => overlay.classList.remove('open'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+    function enviarFormulario(evento) {
+      evento.preventDefault();
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      document.getElementById('formulario').style.display = 'none';
+      document.getElementById('texto-sucesso').textContent = `Obrigado, ${nome}! Entraremos em contato pelo e-mail ${email} em breve. 🎬`;
+      document.getElementById('sucesso').style.display = 'block';
+    }
 
-  // ── Floating hearts ──
-  const heartsEl = document.getElementById('hearts');
-  const heartChars = ['♥','♡','❤','💕','💖','💗'];
-  function spawnHeart() {
-    const s = document.createElement('span');
-    s.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
-    s.style.left = Math.random() * 100 + 'vw';
-    s.style.animationDuration = (8 + Math.random() * 12) + 's';
-    s.style.animationDelay = (Math.random() * 4) + 's';
-    heartsEl.appendChild(s);
-    setTimeout(() => s.remove(), 22000);
-  }
-  setInterval(spawnHeart, 800);
-  for (let i = 0; i < 8; i++) spawnHeart();
-</script>
+    function voltarFilmes() {
+      document.getElementById('formulario').style.display = 'flex';
+      document.getElementById('sucesso').style.display = 'none';
+      document.getElementById('formulario').reset();
+      mostrarPagina('filmes', document.getElementById('btn-filmes'));
+    }
+  </script>
 </body>
 </html>
